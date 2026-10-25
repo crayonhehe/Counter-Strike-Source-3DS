@@ -1,0 +1,35 @@
+
+name: Build 3DS CIA
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: devkitpro/devkitarm
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Install archive tools
+        run: |
+          apt-get update
+          apt-get install -y p7zip-full zip
+
+      - name: Build CIA
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          make cia
+
+      - name: Upload CIA
+        uses: actions/upload-artifact@v4
+        with:
+          name: Counter-Strike-Source-3DS-CIA
+          path: "*.cia"
+          if-no-files-found: error
