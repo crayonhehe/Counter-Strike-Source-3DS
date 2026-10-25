@@ -17,10 +17,9 @@ jobs:
       - name: Check out source
         uses: actions/checkout@v4
 
-      - name: Install archive tools
+      - name: Install build tools
         run: |
-          apt-get update
-          apt-get install -y p7zip-full zip
+          pacman -Sy --noconfirm 3ds-bannertool
 
       - name: Build CIA
         run: |
